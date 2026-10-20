@@ -336,4 +336,20 @@
   </script>
 
 
-</body></html>
+<script id="null-broken-links">
+/* Disables links to pages that are not part of this one-page concept.
+   Keeps external links, mailto/tel, and in-page anchors whose target exists. */
+(function(){
+  function fix(){
+    document.querySelectorAll('a[href]').forEach(function(a){
+      var h=a.getAttribute('href')||'';
+      if(/^(https?:|mailto:|tel:)/i.test(h)) return;
+      if(h.length>1 && h.charAt(0)==='#' && h.charAt(1)!=='?' && document.getElementById(h.slice(1))) return;
+      a.removeAttribute('href'); a.setAttribute('aria-disabled','true'); a.style.cursor='default';
+    });
+  }
+  document.addEventListener('DOMContentLoaded',fix); window.addEventListener('load',fix);
+  try{ new MutationObserver(fix).observe(document.documentElement,{childList:true,subtree:true}); }catch(e){}
+  fix();
+})();
+</script></body></html>
